@@ -80,19 +80,27 @@ app.get('/users/delete/:id', (req, res) => {
     })
 })
 //edit user
-// app.get('/users/edit/:id', (req, res) => {
-//     let userId = req.params.id;
-//     let sql = `SELECT * FROM users WHERE id = ${userId}`;
-//     let query = db.query(sql, (err, user) => {
-//         if(err) throw err;
-//         res.render('users/edit', {
-//             users: user
-//         })
-//     })
-// })
+app.get('/users/:id', (req, res) => {
+    let userId = req.params.id;
+    let sql = `SELECT * FROM users WHERE id = ${userId}`;
+    let query = db.query(sql, (err, user) => {
+        if(err) throw err;
+        res.render('users/edit', {
+            user: user[0]
+        })
+    })
+})
 
-app.get('/users/edit/:id', (req, res) => {
-    res.render('users/create');
+app.post('/users/:id', (req, res) => {
+    let userId = req.params.id;
+    let name = req.body.name;
+    let email = req.body.email;
+    let sql = `UPDATE users SET name='${name}', email='${email}' WHERE id=${userId}`;
+    let query = db.query(sql, (err, result) => {
+        if(err) throw err;
+        console.log('Edit success');
+        res.redirect('/users');
+    })
 })
 
 app.get('/:name', (req, res) => {
